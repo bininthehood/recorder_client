@@ -1,6 +1,5 @@
 using System;
 using System.Net.Sockets;
-using System.Threading;
 
 namespace VoiceLog.Network
 {
@@ -8,7 +7,6 @@ namespace VoiceLog.Network
     {
         private TcpClient _client;
         private NetworkStream _stream;
-
         private readonly object _lock = new object();
         private volatile bool _connected;
 
@@ -31,6 +29,8 @@ namespace VoiceLog.Network
                 _client.EndConnect(ar);
                 _stream = _client.GetStream();
                 _connected = true;
+
+                Console.WriteLine("[TCP] 엔진 서버 연결 완료");
             }
         }
 
@@ -43,7 +43,6 @@ namespace VoiceLog.Network
                 if (!_connected || _stream == null)
                     throw new InvalidOperationException("TCP 연결이 되어있지 않습니다.");
 
-                // 필요하면 Flush를 명시적으로 호출할 수 있음 (보통은 생략 가능)
                 _stream.Write(payload, 0, payload.Length);
             }
         }
@@ -56,10 +55,8 @@ namespace VoiceLog.Network
         private void Cleanup()
         {
             _connected = false;
-
             try { _stream?.Close(); } catch { }
             try { _client?.Close(); } catch { }
-
             _stream = null;
             _client = null;
         }
