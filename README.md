@@ -8,6 +8,10 @@
 ### 메인 화면
 ![Main Screen](assets/screenshot.png)
 
+### 프로그램 워크플로우
+
+![Main Screen](assets/screenshot_workflow.png)
+
 
 ---
 
